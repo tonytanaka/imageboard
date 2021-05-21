@@ -1,15 +1,33 @@
 import React, { useState, useEffect } from "react";
 import { AppBar, Toolbar, Avatar, Button, Typography } from "@material-ui/core";
 import camera from "../../images/camera.png";
-import { Link } from "react-router-dom";
+import { Link, useHistory, useLocation } from "react-router-dom";
+import { useDispatch } from 'react-redux';
 
 import useStyles from "./styles";
 
 const Navbar = () => {
   const classes = useStyles();
-  const [user, setuser] = useState(JSON.parse(localStorage.getItem("profile")))
-  // const user = null;
+  const [user, setUser] = useState(JSON.parse(localStorage.getItem("profile")))
+  const dispatch = useDispatch();
+  const history = useHistory();
+  const location = useLocation();
+
   console.log("User:", user);
+
+  const logout = () => {
+    // wee need to dispatch an action
+    dispatch({type: "LOGOUT"});
+    history.push("/");
+    setUser(null) // remove from LocalStorage
+  }
+
+  useEffect(() => {
+    const token = user?.token;
+    // JWT ..
+
+    setUser(JSON.parse(localStorage.getItem("profile")));
+  },[location])
 
   return (
     <AppBar className={classes.appBar} position="static" color="inherit">
@@ -29,9 +47,9 @@ const Navbar = () => {
         {user ? (
           <div className={classes.profile}>
             <Avatar
-              className={classes.profile}
+              className={classes.purple}
               alt={user.result.name}
-              src={user.result.imageurl}
+              src={user.result.imageUrl}
             >
               {user.result.name.charAt(0)}
             </Avatar>
@@ -41,7 +59,8 @@ const Navbar = () => {
             <Button
               variant="contained"
               className={classes.logout}
-              color="primary"
+              color="secondary"
+              onClick={logout}
             >
               Logout
             </Button>
