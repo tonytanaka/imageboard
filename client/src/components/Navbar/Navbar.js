@@ -2,12 +2,8 @@ import React, { useState, useEffect } from "react";
 import { AppBar, Toolbar, Avatar, Button, Typography } from "@material-ui/core";
 import camera from "../../images/camera.png";
 import { Link, useHistory, useLocation } from "react-router-dom";
-<<<<<<< HEAD
 import { useDispatch } from 'react-redux';
 import decode from 'jwt-decode';
-=======
-import { useDispatch } from "react-redux";
->>>>>>> faaed158809f0c4cad91be941004c1f12d6f5775
 
 import useStyles from "./styles";
 
