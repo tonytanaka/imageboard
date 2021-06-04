@@ -3,50 +3,65 @@ import { TextField, Button, Typography, Paper } from "@material-ui/core";
 import FileBase64 from "react-file-base64";
 import { useDispatch, useSelector } from "react-redux";
 import { actionCreatePost, updatePost } from "../../actions/posts";
-import useStyles from "./styles"
+import useStyles from "./styles";
 
 // get current ID
 
-const Form = ({currentId, setCurrentId}) => {
+const Form = ({ currentId, setCurrentId }) => {
+  const user = JSON.parse(localStorage.getItem("profile"));
   const [postData, setPostData] = useState({
-    creator: "",
     title: "",
     message: "",
     tags: "",
     selectedFile: "",
   });
 
-  const post = useSelector((state) => currentId ? state.posts.find((p) => p._id === currentId) : null);
+  const post = useSelector((state) =>
+    currentId ? state.posts.find((p) => p._id === currentId) : null
+  );
 
   const dispatch = useDispatch();
 
-  useEffect (() => {
+  useEffect(() => {
     if (post) {
-      setPostData(post)
+      setPostData(post);
     }
-  }, [post])
+  }, [post]);
 
   const classes = useStyles();
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if(currentId) {
-      dispatch(updatePost(currentId, postData))
+    if (currentId) {
+      dispatch(
+        updatePost(currentId, { ...postData, name: user?.result?.name })
+      );
     } else {
-      dispatch(actionCreatePost(postData))
+      dispatch(actionCreatePost({ ...postData, name: user?.result?.name }));
     }
-    clear()
+    clear();
   };
 
   const clear = () => {
     setCurrentId(null);
-    setPostData ({
-      creator: "",
+    setPostData({
       title: "",
       message: "",
       tags: "",
       selectedFile: "",
-    })};
+    });
+  };
+
+  if(!user?.result?.name) {
+    //Please sign in
+    return(
+      <Paper className="classes.paper">
+        <Typography variant="h6" align="center">
+          Please Sign In to create your own cards and like other's cards
+        </Typography>
+      </Paper>
+    )
+  }
 
   return (
     <Paper className={classes.paper}>
@@ -56,8 +71,10 @@ const Form = ({currentId, setCurrentId}) => {
         noValidate
         onSubmit={handleSubmit}
       >
-        <Typography variant="h5">{currentId ? `Editing` : `Creating`} Image Card</Typography>
-        <TextField
+        <Typography variant="h5">
+          {currentId ? `Editing` : `Creating`} Image Card
+        </Typography>
+        {/* <TextField
           name="creator"
           variant="outlined"
           label="Creator"
@@ -65,7 +82,7 @@ const Form = ({currentId, setCurrentId}) => {
           value={postData.creator}
           onChange={(e) => setPostData({...postData, creator: e.target.value})
           }
-        />
+        /> */}
         <TextField
           name="title"
           variant="outlined"
