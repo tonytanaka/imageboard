@@ -22,6 +22,12 @@ app.use(function(req, res, next) {
 app.use(express.json({ limit: "30mb", extended: true }));
 app.use(express.urlencoded({ limit: "30mb", extended: true }));
 app.use(cors());
+
+
+
+app.get('/', (req, res)=>{
+  res.json(`welcome home`)
+})
 app.use("/posts", postRoutes);
 app.use("/user", userRoutes);
 
