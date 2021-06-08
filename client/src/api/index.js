@@ -3,6 +3,7 @@ import axios from "axios";
 
 //const url = "http://localhost:5000/posts";
 
+//const API = axios.create({ baseURL: "http://localhost:5000" });
 const API = axios.create({ baseURL: "https://imageboard1.herokuapp.com" });
 
 API.interceptors.request.use((req) => {
