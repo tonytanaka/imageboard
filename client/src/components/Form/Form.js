@@ -1,14 +1,15 @@
 import React, { useState, useEffect } from "react";
+import useStyles from "./styles";
 import { TextField, Button, Typography, Paper } from "@material-ui/core";
-import FileBase64 from "react-file-base64";
+import FileBase from "react-file-base64";
 import { useDispatch, useSelector } from "react-redux";
 import { actionCreatePost, updatePost } from "../../actions/posts";
-import useStyles from "./styles";
 
-// get current ID
+//GET CURRENT ID
 
 const Form = ({ currentId, setCurrentId }) => {
   const user = JSON.parse(localStorage.getItem("profile"));
+
   const [postData, setPostData] = useState({
     title: "",
     message: "",
@@ -52,26 +53,27 @@ const Form = ({ currentId, setCurrentId }) => {
     });
   };
 
-  if(!user?.result?.name) {
+  if (!user?.result?.name) {
     //Please sign in
-    return(
-      <Paper className="classes.paper">
+    return (
+      <Paper className={classes.paper}>
         <Typography variant="h6" align="center">
           Please Sign In to create your own cards and like other's cards
         </Typography>
       </Paper>
-    )
+    );
   }
 
   return (
     <Paper className={classes.paper}>
       <form
-        className={`${classes.root} ${classes.form}`}
         autoComplete="off"
         noValidate
+        className={`${classes.form} ${classes.root}`}
         onSubmit={handleSubmit}
       >
         <Typography variant="h5">
+          {" "}
           {currentId ? `Editing` : `Creating`} Image Card
         </Typography>
         {/* <TextField
@@ -80,7 +82,8 @@ const Form = ({ currentId, setCurrentId }) => {
           label="Creator"
           fullWidth
           value={postData.creator}
-          onChange={(e) => setPostData({...postData, creator: e.target.value})
+          onChange={(e) =>
+            setPostData({ ...postData, creator: e.target.value })
           }
         /> */}
         <TextField
@@ -107,10 +110,12 @@ const Form = ({ currentId, setCurrentId }) => {
           label="Tags"
           fullWidth
           value={postData.tags}
-          onChange={(e) => setPostData({ ...postData, tags: e.target.value })}
+          onChange={(e) =>
+            setPostData({ ...postData, tags: e.target.value.split(",") })
+          }
         />
         <div className={classes.fileInput}>
-          <FileBase64
+          <FileBase
             type="file"
             multiple={false}
             onDone={({ base64 }) =>
@@ -118,22 +123,24 @@ const Form = ({ currentId, setCurrentId }) => {
             }
           />
         </div>
+
         <Button
           className={classes.buttonSubmit}
           variant="contained"
           color="primary"
           size="large"
-          type="submit" // this param is responsible for the button`s behaviour
+          type="submit"
           fullWidth
         >
           Submit
         </Button>
+
         <Button
           variant="contained"
           color="secondary"
           size="small"
-          fullWidth
           onClick={clear}
+          fullWidth
         >
           Clear
         </Button>
