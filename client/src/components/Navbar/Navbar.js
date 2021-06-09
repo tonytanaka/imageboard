@@ -17,7 +17,7 @@ const Navbar = () => {
   const history = useHistory();
   const location = useLocation();
 
-  console.log("User: ", user);
+  // console.log("User: ", user);
 
   const logout = () => {
     //we need to dispatch an action
